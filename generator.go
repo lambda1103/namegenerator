@@ -15,11 +15,19 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package namegenerator
+package main
 
 import (
-	"fmt"
+	_ "embed"
 	"math/rand"
+	"strings"
+)
+
+var (
+	//go:embed wordlists/adjectives.txt
+	adj string
+	//go:embed wordlists/nouns.txt
+	noun string
 )
 
 // Generator ...
@@ -30,14 +38,16 @@ type Generator interface {
 // NameGenerator ...
 type NameGenerator struct {
 	random *rand.Rand
+	adj    []string
+	noun   []string
 }
 
 // Generate ...
 func (rn *NameGenerator) Generate() string {
-	randomAdjective := ADJECTIVES[rn.random.Intn(len(ADJECTIVES))]
-	randomNoun := NOUNS[rn.random.Intn(len(NOUNS))]
 
-	randomName := fmt.Sprintf("%v-%v", randomAdjective, randomNoun)
+	var randomName string
+
+	randomName = rn.adj[rn.random.Intn(len(rn.adj))] + "-" + rn.noun[rn.random.Intn(len(rn.noun))]
 
 	return randomName
 }
@@ -46,6 +56,8 @@ func (rn *NameGenerator) Generate() string {
 func NewNameGenerator(seed int64) Generator {
 	nameGenerator := &NameGenerator{
 		random: rand.New(rand.New(rand.NewSource(99))),
+		adj:    strings.Split(adj, "\n"),
+		noun:   strings.Split(noun, "\n"),
 	}
 	nameGenerator.random.Seed(seed)
 
