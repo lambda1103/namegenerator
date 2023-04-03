@@ -32,7 +32,7 @@ var (
 
 // Generator ...
 type Generator interface {
-	Generate() string
+	Generate(int, string) string
 }
 
 // NameGenerator ...
@@ -43,12 +43,14 @@ type NameGenerator struct {
 }
 
 // Generate ...
-func (rn *NameGenerator) Generate() string {
+func (rn *NameGenerator) Generate(count int, divider string) string {
 
-	var randomName string
-
-	randomName = rn.adj[rn.random.Intn(len(rn.adj))] + "-" + rn.noun[rn.random.Intn(len(rn.noun))]
-
+	randomName := ""
+	for i := 0; i < count-1; i++ {
+		randomName += rn.adj[rn.random.Intn(len(rn.adj))] + divider
+	}
+	randomName += rn.noun[rn.random.Intn(len(rn.noun))]
+	
 	return randomName
 }
 
@@ -56,8 +58,8 @@ func (rn *NameGenerator) Generate() string {
 func NewNameGenerator(seed int64) Generator {
 	nameGenerator := &NameGenerator{
 		random: rand.New(rand.New(rand.NewSource(99))),
-		adj:    strings.Split(adj, "\n"),
-		noun:   strings.Split(noun, "\n"),
+		adj:    strings.Fields(adj),
+		noun:   strings.Fields(noun),
 	}
 	nameGenerator.random.Seed(seed)
 
