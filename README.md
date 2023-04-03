@@ -3,18 +3,6 @@
 A random name generator (for projects, servers, cluster nodes, etc ...)
 implementation in Golang.
 
-## Install
-
-```bash
-go get github.com/lambda1103/namegenerator
-```
-
-You can also update an already installed version:
-
-```bash
-go get -u github.com/lambda1103/namegenerator
-```
-
 ## Example of use
 
 ```go
@@ -28,7 +16,7 @@ func main() {
     seed := time.Now().UTC().UnixNano()
     nameGenerator := namegenerator.NewNameGenerator(seed)
 
-    name := nameGenerator.Generate()
+    name := nameGenerator.Generate(3, "-") //generate string of 2 adjectives + 1 noun, seperate words with "-"
 
     fmt.Println(name)
 }
@@ -36,6 +24,7 @@ func main() {
 
 ## License
 
+Copyright (c) 2023 lambda1103
 Copyright (c) 2018 Goomba project Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
